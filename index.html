@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b3d91">
+<title>Buat File Aktivasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#0b3d91;
+  --primary-dark:#082d6b;
+  --primary-light:#e8efff;
+  --success:#0f9d58;
+  --success-dark:#0b7a44;
+  --text:#0f1a2e;
+  --text-muted:#5b6b85;
+  --border:#e3e8f2;
+  --bg:#f4f6fb;
+  --surface:#ffffff;
+  --danger:#d93025;
+  --radius:14px;
+  --radius-sm:10px;
+  --shadow-sm:0 1px 2px rgba(15,26,46,.06), 0 1px 3px rgba(15,26,46,.04);
+  --shadow-md:0 4px 12px rgba(11,61,145,.08), 0 2px 4px rgba(15,26,46,.04);
+  --shadow-lg:0 10px 30px rgba(11,61,145,.12);
+}
+
+*{box-sizing:border-box;}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
+}
+
+/* Top bar */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:linear-gradient(135deg,var(--primary) 0%,#1256c4 100%);
+  color:#fff;
+  padding:14px 16px calc(14px + env(safe-area-inset-top,0px));
+  padding-top:calc(14px + env(safe-area-inset-top,0px));
+  box-shadow:var(--shadow-md);
+}
+.topbar-inner{
+  max-width:720px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.logo{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  background:rgba(255,255,255,.15);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:16px;
+  letter-spacing:.5px;
+  border:1px solid rgba(255,255,255,.2);
+  flex-shrink:0;
+}
+.topbar h1{
+  margin:0;
+  font-size:16px;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+.topbar .sub{
+  margin:0;
+  font-size:12px;
+  opacity:.85;
+  font-weight:500;
+}
+
+/* Layout */
+.wrap{
+  max-width:720px;
+  margin:0 auto;
+  padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px));
+}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:14px;
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 6px;
+  font-size:15px;
+  font-weight:700;
+  color:var(--text);
+  letter-spacing:-.01em;
+}
+.section-title .badge{
+  width:26px;height:26px;border-radius:8px;
+  background:var(--primary-light);
+  color:var(--primary);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;
+  flex-shrink:0;
+}
+.hint{
+  margin:0 0 14px;
+  font-size:13px;
+  color:var(--text-muted);
+  line-height:1.5;
+}
+
+/* Textarea */
+.field{
+  position:relative;
+}
+textarea{
+  width:100%;
+  min-height:280px;
+  resize:vertical;
+  padding:14px;
+  font-size:15px;
+  font-family:'SF Mono',ui-monospace,'Menlo','Consolas',monospace;
+  line-height:1.55;
+  border-radius:var(--radius-sm);
+  border:1.5px solid var(--border);
+  background:#fbfcfe;
+  color:var(--text);
+  outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  -webkit-appearance:none;
+  appearance:none;
+}
+textarea:focus{
+  border-color:var(--primary);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(11,61,145,.10);
+}
+textarea::placeholder{color:#9aa7bd;}
+
+/* Biaya aktivasi */
+.config-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:stretch;
+}
+.config-input-wrap{
+  flex:1 1 180px;
+  display:flex;
+  align-items:center;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-sm);
+  background:#fbfcfe;
+  overflow:hidden;
+  transition:border-color .15s ease, box-shadow .15s ease;
+}
+.config-input-wrap:focus-within{
+  border-color:var(--primary);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(11,61,145,.10);
+}
+.config-prefix{
+  padding:0 12px;
+  font-size:14px;
+  font-weight:700;
+  color:var(--primary);
+  background:var(--primary-light);
+  align-self:stretch;
+  display:flex;
+  align-items:center;
+}
+.config-input-wrap input{
+  flex:1;
+  min-width:0;
+  border:none;
+  background:transparent;
+  padding:12px 14px;
+  font-size:16px;
+  font-weight:600;
+  font-family:inherit;
+  color:var(--text);
+  outline:none;
+}
+.btn-config{
+  flex:0 0 auto;
+  padding:12px 16px;
+  border:none;
+  border-radius:var(--radius-sm);
+  background:var(--primary);
+  color:#fff;
+  font-size:14px;
+  font-weight:700;
+  font-family:inherit;
+  cursor:pointer;
+}
+.btn-config:hover{background:var(--primary-dark);}
+.btn-config.btn-reset{
+  background:#eef2f8;
+  color:var(--text-muted);
+  border:1.5px solid var(--border);
+}
+.btn-config.btn-reset:hover{background:#e3e8f2; color:var(--text);}
+.config-status{
+  margin-top:10px;
+  font-size:12px;
+  color:var(--success-dark);
+  font-weight:600;
+  min-height:18px;
+}
+
+/* Textarea */
+.qr-upload{
+  display:block;
+  padding:14px;
+  background:#fbfcfe;
+  border:1.5px dashed #c7d2e5;
+  border-radius:var(--radius-sm);
+  transition:border-color .15s ease, background .15s ease;
+  cursor:pointer;
+}
+.qr-upload:hover{border-color:var(--primary); background:#f6f9ff;}
+.qr-upload-label{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
+}
+.qr-upload-icon{
+  width:40px;height:40px;
+  border-radius:10px;
+  background:var(--primary-light);
+  color:var(--primary);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.qr-upload-icon svg{width:22px;height:22px;}
+.qr-upload-text small{
+  display:block;
+  font-weight:500;
+  color:var(--text-muted);
+  margin-top:2px;
+  font-size:12px;
+}
+.qr-upload input[type=file]{
+  display:none;
+}
+.qr-preview{
+  display:none;
+  margin-top:12px;
+  padding:10px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  align-items:center;
+  gap:12px;
+}
+.qr-preview.show{display:flex;}
+.qr-preview img{
+  width:52px;height:52px;
+  object-fit:cover;
+  border-radius:8px;
+  border:1px solid var(--border);
+}
+.qr-preview .qr-info{flex:1; min-width:0;}
+.qr-preview .qr-name{
+  font-size:13px;font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.qr-preview .qr-size{font-size:12px;color:var(--text-muted);}
+.qr-preview button{
+  background:transparent;
+  border:none;
+  color:var(--danger);
+  font-size:13px;font-weight:600;
+  cursor:pointer;
+  padding:6px 10px;
+  border-radius:6px;
+  width:auto;
+  margin:0;
+}
+.qr-preview button:hover{background:#fef2f1;}
+
+/* Preview card */
+.preview{
+  background:linear-gradient(135deg,#fbfcff 0%,#f4f7ff 100%);
+  border:1px solid #dbe4f7;
+  border-radius:var(--radius-sm);
+  padding:0;
+  overflow:hidden;
+}
+.preview.hidden{display:none;}
+.preview-header{
+  padding:12px 14px;
+  background:linear-gradient(135deg,var(--primary) 0%,#1256c4 100%);
+  color:#fff;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.02em;
+  display:flex;align-items:center;gap:8px;
+}
+.preview-header svg{width:16px;height:16px;}
+.preview-body{padding:14px;}
+.preview-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  padding:8px 0;
+  border-bottom:1px dashed #dbe4f7;
+  font-size:14px;
+}
+.preview-row:last-child{border-bottom:none;}
+.preview-row .k{
+  color:var(--text-muted);
+  font-weight:500;
+  flex-shrink:0;
+}
+.preview-row .v{
+  color:var(--text);
+  font-weight:600;
+  text-align:right;
+  word-break:break-word;
+}
+.preview-row.total{
+  margin-top:6px;
+  padding-top:12px;
+  border-top:2px solid var(--primary);
+  border-bottom:none;
+}
+.preview-row.total .k{color:var(--primary); font-weight:700;}
+.preview-row.total .v{color:var(--primary); font-weight:800; font-size:16px;}
+
+/* Empty state */
+.empty{
+  padding:24px 14px;
+  text-align:center;
+  color:var(--text-muted);
+  font-size:13px;
+  background:#fbfcfe;
+  border:1px dashed var(--border);
+  border-radius:var(--radius-sm);
+}
+.empty svg{width:36px;height:36px;opacity:.4;margin-bottom:6px;}
+
+/* Buttons */
+.actions{
+  display:grid;
+  gap:10px;
+  margin-top:6px;
+}
+button.btn{
+  width:100%;
+  padding:15px 18px;
+  border:none;
+  color:#fff;
+  font-size:15px;
+  font-weight:700;
+  border-radius:var(--radius-sm);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:transform .06s ease, box-shadow .15s ease, background .15s ease;
+  font-family:inherit;
+  letter-spacing:.01em;
+  min-height:52px;
+  -webkit-tap-highlight-color:transparent;
+}
+button.btn svg{width:18px;height:18px;}
+button.btn:active{transform:scale(.98);}
+.btn-open{
+  background:linear-gradient(135deg,var(--primary) 0%,#1256c4 100%);
+  box-shadow:0 4px 14px rgba(11,61,145,.28);
+}
+.btn-open:hover{filter:brightness(1.05);}
+.btn-dl{
+  background:linear-gradient(135deg,var(--success) 0%,#12b268 100%);
+  box-shadow:0 4px 14px rgba(15,157,88,.28);
+}
+.btn-dl:hover{filter:brightness(1.05);}
+
+/* Note */
+.note{
+  margin-top:6px;
+  padding:12px 14px;
+  background:#eef4ff;
+  border:1px solid #cfdcfa;
+  border-left:4px solid var(--primary);
+  border-radius:var(--radius-sm);
+  font-size:13px;
+  color:#0a3078;
+  line-height:1.55;
+}
+.note b{color:var(--primary-dark);}
+
+/* Footer */
+.foot{
+  text-align:center;
+  color:var(--text-muted);
+  font-size:12px;
+  padding:12px 0 4px;
+}
+
+/* Mobile refinements */
+@media (max-width:520px){
+  .topbar h1{font-size:15px;}
+  .topbar .sub{font-size:11px;}
+  .card{padding:14px; border-radius:12px;}
+  textarea{min-height:240px; font-size:14px;}
+  .preview-row .v{font-size:13.5px;}
+  .preview-row.total .v{font-size:15px;}
+}
+
+@media (min-width:640px){
+  .actions{grid-template-columns:1fr 1fr;}
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="logo">IA</div>
+    <div>
+      <h1>Buat File Aktivasi</h1>
+      <p class="sub">Isi data lalu buka atau unduh file aktivasi</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card">
+    <h2 class="section-title">Biaya Aktivasi</h2>
+    <p class="hint">Atur nominal biaya aktivasi di sini. Nilai tersimpan di browser dan dipakai di semua halaman.</p>
+    <div class="config-row">
+      <div class="config-input-wrap">
+        <span class="config-prefix">Rp</span>
+        <input type="text" id="biaya-aktivasi" inputmode="numeric" placeholder="450.000" aria-label="Biaya aktivasi">
+      </div>
+      <button type="button" class="btn-config" onclick="simpanBiayaAktivasi()">Simpan</button>
+      <button type="button" class="btn-config btn-reset" onclick="resetBiayaAktivasi()">Reset</button>
+    </div>
+    <div id="biaya-status" class="config-status"></div>
+  </section>
+
+  <!-- Step 1: Data -->
+  <section class="card">
+    <h2 class="section-title"><span class="badge">1</span> Isi Aktivasi Data</h2>
+    <p class="hint">Tempel data aktivasi (nama, bank, saldo dibekukan, biaya aktivasi, dll) di kolom bawah ini. Preview akan diperbarui otomatis.</p>
+    <div class="field">
+      <textarea id="input" placeholder="Contoh:&#10;Nama: Budi Santoso&#10;Bank: BCA&#10;Saldo dibekukan: 5.000.000&#10;Biaya aktivasi: 250.000"></textarea>
+    </div>
+  </section>
+
+  <!-- Step 2: QR -->
+  <section class="card">
+    <h2 class="section-title"><span class="badge">2</span> Unggah QR (opsional)</h2>
+    <p class="hint">Pilih gambar QR pembayaran. Jika tidak diunggah, akan menggunakan <b>QR.png</b> bawaan.</p>
+
+    <label for="qr-file" class="qr-upload">
+      <div class="qr-upload-label">
+        <div class="qr-upload-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM17 17h4M14 20h3"/>
+          </svg>
+        </div>
+        <div class="qr-upload-text">
+          Pilih file QR
+          <small>PNG / JPG · Ketuk untuk memilih dari galeri</small>
+        </div>
+      </div>
+      <input id="qr-file" type="file" accept="image/*">
+    </label>
+
+    <div id="qr-preview" class="qr-preview">
+      <img id="qr-thumb" alt="QR preview">
+      <div class="qr-info">
+        <div id="qr-name" class="qr-name">-</div>
+        <div id="qr-size" class="qr-size">-</div>
+      </div>
+      <button type="button" onclick="hapusQr()" aria-label="Hapus QR">Hapus</button>
+    </div>
+  </section>
+
+  <!-- Step 3: Preview -->
+  <section class="card">
+    <h2 class="section-title"><span class="badge">3</span> Preview Data</h2>
+    <div id="preview" class="preview hidden">
+      <div class="preview-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        Ringkasan Aktivasi
+      </div>
+      <div class="preview-body" id="preview-body"></div>
+    </div>
+    <div id="empty" class="empty">
+      <div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      Belum ada data. Isi kolom di atas untuk melihat preview.
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <section class="actions">
+    <button class="btn btn-open" onclick="bukaActivasi()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Buka activasi.html
+    </button>
+    <button class="btn btn-dl" onclick="downloadActivasi()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Unduh HTML
+    </button>
+  </section>
+
+  <div class="note">
+    <b>Info:</b> Data akan dikirim ke <b>activasi.html</b> saat dibuka. Pastikan semua isian sudah benar sebelum melanjutkan.
+  </div>
+
+  <p class="foot">© <span id="year"></span> Aktivasi Tool</p>
+</main>
+
+<script src="iasc-data.js"></script>
+<script src="iasc-build.js"></script>
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+initBiayaAktivasiUI();
+
+var qrBase64 = "";
+
+var fileInput = document.getElementById("qr-file");
+var qrPreview = document.getElementById("qr-preview");
+var qrThumb   = document.getElementById("qr-thumb");
+var qrName    = document.getElementById("qr-name");
+var qrSize    = document.getElementById("qr-size");
+
+fileInput.addEventListener("change", function (e) {
+  qrBase64 = "";
+  var file = e.target.files && e.target.files[0];
+  if (!file) { qrPreview.classList.remove("show"); return; }
+  var reader = new FileReader();
+  reader.onload = function (ev) {
+    qrBase64 = ev.target.result;
+    qrThumb.src = qrBase64;
+    qrName.textContent = file.name;
+    qrSize.textContent = formatBytes(file.size);
+    qrPreview.classList.add("show");
+  };
+  reader.readAsDataURL(file);
+});
+
+function hapusQr(){
+  qrBase64 = "";
+  fileInput.value = "";
+  qrPreview.classList.remove("show");
+}
+
+function formatBytes(b){
+  if (b < 1024) return b + " B";
+  if (b < 1024*1024) return (b/1024).toFixed(1) + " KB";
+  return (b/1024/1024).toFixed(2) + " MB";
+}
+
+document.getElementById("input").addEventListener("input", tampilkanPreview);
+tampilkanPreview();
+
+function initBiayaAktivasiUI() {
+  var input = document.getElementById("biaya-aktivasi");
+  if (!input || typeof iascGetBiayaAktivasi !== "function") return;
+  input.value = iascFormatNum(iascGetBiayaAktivasi());
+}
+
+function showBiayaStatus(msg) {
+  var el = document.getElementById("biaya-status");
+  if (el) el.textContent = msg || "";
+}
+
+function simpanBiayaAktivasi() {
+  var input = document.getElementById("biaya-aktivasi");
+  if (!input || typeof iascSetBiayaAktivasi !== "function") return;
+  if (!iascSetBiayaAktivasi(input.value)) {
+    alert("Nominal biaya aktivasi tidak valid.");
+    return;
+  }
+  input.value = iascFormatNum(iascGetBiayaAktivasi());
+  tampilkanPreview();
+  showBiayaStatus("Tersimpan: Rp " + iascFormatNum(iascGetBiayaAktivasi()) + ",-");
+}
+
+function resetBiayaAktivasi() {
+  if (typeof iascResetBiayaAktivasi === "function") {
+    iascResetBiayaAktivasi();
+  }
+  initBiayaAktivasiUI();
+  tampilkanPreview();
+  showBiayaStatus("Dikembalikan ke nilai iasc-config.json");
+}
+
+function ambilDataParsed() {
+  if (typeof iascParseText !== "function") return null;
+  var text = document.getElementById("input").value;
+  var d = iascParseText(text);
+  if (!d) return null;
+  d.qrBase64 = qrBase64;
+  return d;
+}
+
+function fmt(n){
+  if (typeof iascFormatNum === "function") return iascFormatNum(n);
+  return (n || 0).toLocaleString("id-ID");
+}
+
+function tampilkanPreview() {
+  var previewEl = document.getElementById("preview");
+  var bodyEl    = document.getElementById("preview-body");
+  var emptyEl   = document.getElementById("empty");
+
+  var d = ambilDataParsed();
+  if (!d) {
+    previewEl.classList.add("hidden");
+    emptyEl.style.display = "block";
+    return;
+  }
+  var total = (d.kerugian || 0) + (d.aktivasi || 0);
+  emptyEl.style.display = "none";
+  previewEl.classList.remove("hidden");
+  bodyEl.innerHTML =
+    row("Nama", d.nama || "-") +
+    row("Bank", d.bank || "-") +
+    row("Saldo dibekukan", "Rp " + fmt(d.kerugian) + ",-") +
+    row("Biaya aktivasi",  "Rp " + fmt(d.aktivasi) + ",-") +
+    row("Total diterima",  "Rp " + fmt(total) + ",-", true);
+}
+
+function row(k, v, total){
+  return '<div class="preview-row'+(total?' total':'')+'"><span class="k">'+k+'</span><span class="v">'+v+'</span></div>';
+}
+
+function siapkanPayload() {
+  var d = ambilDataParsed();
+  if (!d) {
+    alert("Data belum lengkap. Pastikan ada nama, bank, dan total kerugian.");
+    return null;
+  }
+  return iascToActivasiPayload(d, d.qrBase64 || "QR.png");
+}
+
+function bukaActivasi() {
+  var payload = siapkanPayload();
+  if (!payload) return;
+  iascSaveActivasiPrefill(payload);
+  window.open("activasi.html", "_blank");
+}
+
+async function downloadActivasi() {
+  var payload = siapkanPayload();
+  if (!payload) return;
+  await iascDownloadActivasiHtml(payload);
+}
+</script>
+
+</body>
+</html>
