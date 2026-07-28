@@ -1,4 +1,4 @@
-var IASC_CONFIG = { biayaAktivasi: 249000 };
+var IASC_CONFIG = { biayaAktivasi: 500000 };
 var IASC_CONFIG_URL = "iasc-config.json";
 
 function iascAngka(v) {
